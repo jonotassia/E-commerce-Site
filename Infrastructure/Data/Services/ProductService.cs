@@ -1,9 +1,10 @@
 ﻿using Infrastructure.Data;
 using Core.Models;
 using AutoMapper;
+using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Services.Products
+namespace Infrastructure.Data.Services
 {
     public class ProductService : IProductService
     {

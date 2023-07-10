@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data;
-using API.Services.Products;
+using Core.Interfaces;
+using Infrastructure.Data.Services;
 using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);

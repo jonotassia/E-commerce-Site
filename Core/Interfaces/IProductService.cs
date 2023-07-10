@@ -1,6 +1,6 @@
 ﻿using Core.Models;
 
-namespace API.Services.Products
+namespace Core.Interfaces
 {
     public interface IProductService
     {
