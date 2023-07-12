@@ -14,5 +14,12 @@ namespace Core.Specifications
             AddInclude(x => x.ProductType);
             AddInclude(x => x.ProductBrand);
         }
+
+        // By using the criteria based constructor, the call to base replaces sets the criteria for the class
+        public ProductsWithTypesAndBrands(int id) : base(x => x.Id == id)
+        {
+            AddInclude(x => x.ProductType);
+            AddInclude(x => x.ProductBrand);
+        }
     }
 }

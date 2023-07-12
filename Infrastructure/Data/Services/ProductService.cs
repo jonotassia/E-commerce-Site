@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Data;
 using Core.Models;
-using AutoMapper;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +8,10 @@ namespace Infrastructure.Data.Services
     public class ProductService : IProductService
     {
         private readonly StoreContext _context;
-        private readonly IMapper _mapper;
 
-        public ProductService(StoreContext context, IMapper mapper)
+        public ProductService(StoreContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<ServiceResponse<List<ProductBrand>>> GetProductBrands()

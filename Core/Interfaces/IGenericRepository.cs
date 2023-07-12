@@ -13,6 +13,6 @@ namespace Core.Interfaces
         public Task<ServiceResponse<List<T>>> GetListAsync();
         public Task<ServiceResponse<T>> GetByIdAsync(int id);
         public Task<ServiceResponse<T>> GetEntityWithSpec(ISpecification<T> spec);
-        Task<ServiceResponse<IReadOnlyList<T>>> ListAsync(ISpecification<T> spec);
+        Task<ServiceResponse<List<T>>> ListAsync(ISpecification<T> spec);
     }
 }

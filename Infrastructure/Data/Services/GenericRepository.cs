@@ -70,9 +70,9 @@ namespace Infrastructure.Data.Services
             return response;
         }
 
-        public async Task<ServiceResponse<IReadOnlyList<T>>> ListAsync(ISpecification<T> spec)
+        public async Task<ServiceResponse<List<T>>> ListAsync(ISpecification<T> spec)
         {
-            var response = new ServiceResponse<IReadOnlyList<T>>();
+            var response = new ServiceResponse<List<T>>();
 
             var data = await ApplySpecification(spec).ToListAsync();
 

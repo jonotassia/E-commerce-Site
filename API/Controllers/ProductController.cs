@@ -1,4 +1,6 @@
-﻿using Core.Models;
+﻿using API.Dtos;
+using AutoMapper;
+using Core.Models;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +14,19 @@ namespace API.Controllers
         private readonly IGenericRepository<Product> _productRepo;
         private readonly IGenericRepository<ProductBrand> _productBrandRepo;
         private readonly IGenericRepository<ProductType> _productTypeRepo;
+        private readonly IMapper _mapper;
 
         public ProductController(IGenericRepository<Product> productRepo, IGenericRepository<ProductBrand> productBrandRepo,
-            IGenericRepository<ProductType> productTypeRepo)
+            IGenericRepository<ProductType> productTypeRepo, IMapper mapper)
         {
             _productRepo = productRepo;
             _productBrandRepo = productBrandRepo;
             _productTypeRepo = productTypeRepo;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<Product>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
             var spec = new ProductsWithTypesAndBrands();
             
@@ -32,21 +36,34 @@ namespace API.Controllers
             {
                 return NotFound(response);
             }
-            
-            return Ok(response);
+            // Adding unecessary code in order to continue with examples
+            var transformedResponse = new ServiceResponse<List<GetProductDto>>
+            {
+                Data = response.Data?.Select(p => _mapper.Map<GetProductDto>(p)).ToList()
+            };
+
+            return Ok(transformedResponse);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<Product>>> GetProductAsync(int id)
+        public async Task<ActionResult<ServiceResponse<GetProductDto>>> GetProductAsync(int id)
         {
-            var response = await _productRepo.GetByIdAsync(id);
+            var spec = new ProductsWithTypesAndBrands(id);
+            
+            var response = await _productRepo.GetEntityWithSpec(spec);
 
             if (!response.Success)
             {
                 return NotFound(response);
             }
 
-            return Ok(response);
+            // Adding unecessary code in order to continue with examples
+            var transformedResponse = new ServiceResponse<GetProductDto>
+            {
+                Data = _mapper.Map<Product, GetProductDto>(response.Data!)
+            };
+
+            return Ok(transformedResponse);
         }
 
         [HttpGet("brands")]
