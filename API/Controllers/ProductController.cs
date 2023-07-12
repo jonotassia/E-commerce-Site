@@ -1,5 +1,6 @@
 ﻿using Core.Models;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -8,17 +9,24 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly IGenericRepository<Product> _productRepo;
+        private readonly IGenericRepository<ProductBrand> _productBrandRepo;
+        private readonly IGenericRepository<ProductType> _productTypeRepo;
 
-        public ProductController(IProductService productService)
+        public ProductController(IGenericRepository<Product> productRepo, IGenericRepository<ProductBrand> productBrandRepo,
+            IGenericRepository<ProductType> productTypeRepo)
         {
-            _productService = productService;
+            _productRepo = productRepo;
+            _productBrandRepo = productBrandRepo;
+            _productTypeRepo = productTypeRepo;
         }
 
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<Product>>>> Get()
         {
-            var response = await _productService.GetProducts();
+            var spec = new ProductsWithTypesAndBrands();
+            
+            var response = await _productRepo.ListAsync(spec);
 
             if (!response.Success)
             {
@@ -31,7 +39,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<Product>>> GetProductAsync(int id)
         {
-            var response = await _productService.GetProductById(id);
+            var response = await _productRepo.GetByIdAsync(id);
 
             if (!response.Success)
             {
@@ -44,7 +52,7 @@ namespace API.Controllers
         [HttpGet("brands")]
         public async Task<ActionResult<ServiceResponse<ProductBrand>>> GetBrandsAsync()
         {
-            var response = await _productService.GetProductBrands();
+            var response = await _productBrandRepo.GetListAsync();
 
             if (!response.Success)
             {
@@ -57,7 +65,7 @@ namespace API.Controllers
         [HttpGet("types")]
         public async Task<ActionResult<ServiceResponse<ProductBrand>>> GetTypesAsync()
         {
-            var response = await _productService.GetProductTypes();
+            var response = await _productTypeRepo.GetListAsync();
 
             if (!response.Success)
             {
