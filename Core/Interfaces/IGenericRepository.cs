@@ -14,5 +14,6 @@ namespace Core.Interfaces
         public Task<ServiceResponse<T>> GetByIdAsync(int id);
         public Task<ServiceResponse<T>> GetEntityWithSpec(ISpecification<T> spec);
         Task<ServiceResponse<List<T>>> ListAsync(ISpecification<T> spec);
+        Task<int> CountAsync(ISpecification<T> spec);
     }
 }

@@ -26,9 +26,13 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> GetProducts([FromQuery]ProductSpecParams productParams)
         {
-            var spec = new ProductsWithTypesAndBrands();
+            var spec = new ProductsWithTypesAndBrands(productParams);
+
+            var countSpec = new ProductWithFiltersForCountSpecification(productParams);
+
+            var totalItems = await _productRepo.CountAsync(countSpec);
             
             var response = await _productRepo.ListAsync(spec);
 
@@ -41,6 +45,10 @@ namespace API.Controllers
             {
                 Data = response.Data?.Select(p => _mapper.Map<GetProductDto>(p)).ToList()
             };
+
+            transformedResponse.PageIndex = productParams.PageIndex;
+            transformedResponse.PageSize = productParams.PageSize;
+            transformedResponse.Count = totalItems;
 
             return Ok(transformedResponse);
         }
