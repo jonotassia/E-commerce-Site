@@ -36,10 +36,13 @@ namespace API.Controllers
             
             var response = await _productRepo.ListAsync(spec);
 
-            if (!response.Success)
+            /* REMOVING FOR HANDLING OF EMPTY RETURN IN CLIENT
+             if (!response.Success)
             {
                 return NotFound(response);
             }
+            */
+
             // Adding unecessary code in order to continue with examples
             var transformedResponse = new ServiceResponse<List<GetProductDto>>
             {
@@ -60,10 +63,12 @@ namespace API.Controllers
             
             var response = await _productRepo.GetEntityWithSpec(spec);
 
-            if (!response.Success)
+            /* REMOVING FOR HANDLING OF EMPTY RETURN IN CLIENT
+             if (!response.Success)
             {
                 return NotFound(response);
             }
+            */
 
             // Adding unecessary code in order to continue with examples
             var transformedResponse = new ServiceResponse<GetProductDto>
