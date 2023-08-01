@@ -63,12 +63,10 @@ namespace API.Controllers
             
             var response = await _productRepo.GetEntityWithSpec(spec);
 
-            /* REMOVING FOR HANDLING OF EMPTY RETURN IN CLIENT
-             if (!response.Success)
+            if (!response.Success)
             {
                 return NotFound(response);
             }
-            */
 
             // Adding unecessary code in order to continue with examples
             var transformedResponse = new ServiceResponse<GetProductDto>
